@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+*{
+    font-family: Montserrat;
+    padding: 0;
+    margin:  0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    height: 100vh;
+}
+
+.container  {
+    width: 500px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+}
+.form {
+    justify-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 25px;
+}
+
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+#formHead {
+    text-align: center;
+}
+#formHead h2 {
+    font-size: 40px;
+    font-weight: 650;
+}
+#formHead p {
+    font-size: 18px;
+    margin: 0;
+
+}
+.buttonContainer button{
+    font-size: 18px;
+    font-weight: 600;
+    border: 2px solid black;
+    border-radius: 125px;
+    width: 250px;
+    height: 50px;
+    background-color: white;
+    transition: color 0.2s;
+    
+}
+.buttonContainer button:hover{ 
+    background-color: black;
+    color: white;
+}
+
+.buttonContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+}
+.requirements {
+    cursor: pointer;
+    text-decoration: underline;
+    color: black ;
+
+}
+
+
+.validPwd, .validConf {
+    display: none;
+
+}
+.link{
+    color: black;
+    font-weight: 550;
+}
+
+/* Feedback visual (verde/vermelho) */
+.is-valid { border-color: #198754 !important; box-shadow: 0 0 0 .2rem rgba(25,135,84,.25); }
+.is-invalid { border-color: #dc3545 !important; box-shadow: 0 0 0 .2rem rgba(220,53,69,.25); }
+
+/* Mensagens de erro */
+.validPwd, .validConf { display: none; color: #dc3545; font-size: .9rem; margin-top: .25rem; }
+.show-error { display: block; }
+
+/* “Piscar” suave quando valida/invalida */
+@keyframes blink-valid { 0% { box-shadow: none; } 50% { box-shadow: 0 0 0 .2rem rgba(25,135,84,.35); } 100% { box-shadow: none; } }
+@keyframes blink-invalid { 0% { box-shadow: none; } 50% { box-shadow: 0 0 0 .2rem rgba(220,53,69,.35); } 100% { box-shadow: none; } }
+.blink-valid { animation: blink-valid .5s ease-in-out; }
+.blink-invalid { animation: blink-invalid .5s ease-in-out; }
+
+/* Link de requisitos */
+a.requirements { display: inline-flex; align-items: center; gap: .35rem; margin-top: .35rem; font-size: .9rem; }
+a.requirements:focus { outline: none; }
