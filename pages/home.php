@@ -66,7 +66,7 @@ function confirmarExclusao(id) {
     <p class="text-muted">
         🌙 Histórias cadastradas: <strong><?php echo $totalHistorias; ?></strong>
     </p>
-
+  
     <?php if ($historias): ?>
         <?php foreach ($historias as $h): ?>
             <article class="story-card">
@@ -74,6 +74,7 @@ function confirmarExclusao(id) {
                 <p class="mb-2"><?php echo nl2br(htmlspecialchars($h['conteudo'])); ?></p>
                 <small class="text-muted d-block mb-2">
                     ✍️ Autor: <strong><?php echo htmlspecialchars($h['nomeAutor'] ?? '—'); ?></strong> ·
+                    <!-- Operador ternario (??): se existir valor mostra, se não, mostra '—' -->
                     🏷️ Tipo: <?php echo htmlspecialchars($h['nomeTipo'] ?? '—'); ?> ·
                     📅 <?php echo date('d/m/Y', strtotime($h['dataPublicacao'])); ?>
                 </small>

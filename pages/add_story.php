@@ -18,7 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erro = "Preencha todos os campos.";
     } else {
         $ins = $conn->prepare("INSERT INTO historia (titulo, conteudo, idAutor, idTipoHistoria) VALUES (:t,:c,:a,:tp)");
-        $ins->execute(['t'=>$titulo,'c'=>$conteudo,'a'=>$idAutor,'tp'=>$idTipo]);
+        // 8.1 - Função com passagem de parâmetros:
+        // A função execute() recebe valores vindos do formulário e envia para o banco.
+        $ins->execute(params: ['t'=>$titulo,'c'=>$conteudo,'a'=>$idAutor,'tp'=>$idTipo]);
         header('Location: home.php'); exit;
     }
 }
