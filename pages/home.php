@@ -5,22 +5,8 @@ if (!isset($_SESSION['idUsuario'])) { header('Location: login.php'); exit; }
 include('../includes/db_connect.php');
 
 // Busca histórias + autor + tipo
-$sql = "
-  SELECT 
-    h.idHistoria,
-    h.titulo,
-    h.conteudo,
-    h.dataPublicacao,
-    a.nomeAutor,
-    t.nomeTipo
-  FROM historia h
-  LEFT JOIN autor a ON h.idAutor = a.idAutor
-  LEFT JOIN tipo_historia t ON h.idTipoHistoria = t.idTipoHistoria
-  ORDER BY h.dataPublicacao DESC, h.idHistoria DESC
-";
-$stmt = $conn->prepare($sql);
-$stmt->execute();
-$historias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+require_once "../models/Historia.php";
+$historias = Historia::listarTodas($conn);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -30,7 +16,7 @@ $historias = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body{background:linear-gradient(to bottom,#c9d6ff,#e2e2e2);font-family:system-ui,-apple-system,Segoe UI,Roboto}
+    body{background-color: #c9d6ff;font-family:system-ui,-apple-system,Segoe UI,Roboto}
     .story-card{background:#fff;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:20px;margin:16px auto;max-width:800px}
     .topbar{position:sticky;top:0;background:#ffffffcc;backdrop-filter:saturate(1.2) blur(6px);border-bottom:1px solid #e9ecef}
   </style>
