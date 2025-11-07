@@ -25,6 +25,7 @@ function validatePassword() {
 }
 
 function validateConfirm() {
+    // operador lógico
   const ok = pwd.value.length > 0 && pwd.value === pwdConf.value;
   invalidConf.classList.toggle('show-error', !ok);
   touchValidState(pwdConf, ok);

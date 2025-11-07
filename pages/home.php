@@ -21,6 +21,26 @@ $historias = Historia::listarTodas($conn);
     .topbar{position:sticky;top:0;background:#ffffffcc;backdrop-filter:saturate(1.2) blur(6px);border-bottom:1px solid #e9ecef}
   </style>
 </head>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+function confirmarExclusao(id) {
+    Swal.fire({
+        title: 'Tem certeza?',
+        text: "A história será apagada definitivamente.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sim, excluir',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = `delete_story.php?id=${id}`;
+        }
+    })
+}
+</script>
+
 <body>
   <nav class="topbar py-2">
     <div class="container d-flex justify-content-between align-items-center">
@@ -33,36 +53,45 @@ $historias = Historia::listarTodas($conn);
     </div>
   </nav>
 
-  <div class="container mt-4">
-    <?php if ($historias): ?>
-      <?php foreach ($historias as $h): ?>
-        <article class="story-card">
-          <h3 class="mb-2"><?php echo htmlspecialchars($h['titulo']); ?></h3>
-          <p class="mb-2"><?php echo nl2br(htmlspecialchars($h['conteudo'])); ?></p>
-          <small class="text-muted">
-            ✍️ Autor: <strong><?php echo htmlspecialchars($h['nomeAutor'] ?? '—'); ?></strong> ·
-            🏷️ Tipo: <?php echo htmlspecialchars($h['nomeTipo'] ?? '—'); ?> ·
-            📅 <?php echo date('d/m/Y', strtotime($h['dataPublicacao'])); ?>
-          </small>
-          <small class="text-muted">
-  ✍️ Autor: <strong><?php echo htmlspecialchars($h['nomeAutor'] ?? '—'); ?></strong> ·
-  🏷️ Tipo: <?php echo htmlspecialchars($h['nomeTipo'] ?? '—'); ?> ·
-  📅 <?php echo date('d/m/Y', strtotime($h['dataPublicacao'])); ?>
-</small>
+ <div class="container mt-4">
 
-<div class="mt-2">
-  <a href="delete_story.php?id=<?php echo $h['idHistoria']; ?>" 
-     class="btn btn-sm btn-outline-danger"
-     onclick="return confirm('Tem certeza que deseja excluir esta história?');">
-     🗑️ Excluir
-  </a>
+    <?php
+    // 5.1 FOR
+    $totalHistorias = 0;
+    for ($i = 0; $i < count($historias); $i++) {
+        $totalHistorias++;
+    }
+    ?>
+
+    <p class="text-muted">
+        🌙 Histórias cadastradas: <strong><?php echo $totalHistorias; ?></strong>
+    </p>
+
+    <?php if ($historias): ?>
+        <?php foreach ($historias as $h): ?>
+            <article class="story-card">
+                <h3 class="mb-2"><?php echo htmlspecialchars($h['titulo']); ?></h3>
+                <p class="mb-2"><?php echo nl2br(htmlspecialchars($h['conteudo'])); ?></p>
+                <small class="text-muted d-block mb-2">
+                    ✍️ Autor: <strong><?php echo htmlspecialchars($h['nomeAutor'] ?? '—'); ?></strong> ·
+                    🏷️ Tipo: <?php echo htmlspecialchars($h['nomeTipo'] ?? '—'); ?> ·
+                    📅 <?php echo date('d/m/Y', strtotime($h['dataPublicacao'])); ?>
+                </small>
+
+                <a href="edit_story.php?id=<?php echo $h['idHistoria']; ?>" 
+                   class="btn btn-sm btn-outline-primary">✏️ Editar</a>
+
+                <button class="btn btn-sm btn-outline-danger"
+                        onclick="confirmarExclusao(<?php echo $h['idHistoria']; ?>)">
+                    🗑️ Excluir
+                </button>
+            </article>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <div class="alert alert-info text-center">Nenhuma história encontrada.</div>
+    <?php endif; ?>
+
 </div>
 
-        </article>
-      <?php endforeach; ?>
-    <?php else: ?>
-      <div class="alert alert-info text-center">Nenhuma história ainda. Que tal <a href="add_story.php">criar a primeira?</a></div>
-    <?php endif; ?>
-  </div>
 </body>
 </html>

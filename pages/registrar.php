@@ -9,7 +9,7 @@ $nome = trim($_POST['nomeUsuario'] ?? '');
 $email = trim($_POST['email'] ?? '');
 $senha = $_POST['senha'] ?? '';
 $conf  = $_POST['confirmar_senha'] ?? '';
-
+// operador aritmético
 if ($senha !== $conf) {
     echo "<script>alert('As senhas não coincidem.'); history.back();</script>";
     exit;

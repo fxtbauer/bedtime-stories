@@ -5,7 +5,7 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: login.php'); exit;
 }
-
+//string
 $email = trim($_POST['email'] ?? '');
 $senha = $_POST['senha'] ?? '';
 

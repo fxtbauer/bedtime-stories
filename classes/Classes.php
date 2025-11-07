@@ -37,6 +37,7 @@ class Usuario extends Pessoa {
         return $this->email;
     }
 
+   //camel case
     public function verificarSenha($senhaDigitada) {
         return password_verify($senhaDigitada, $this->senha);
     }
