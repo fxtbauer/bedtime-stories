@@ -2,14 +2,15 @@
 include('../includes/db_connect.php');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: register.php'); exit;
+    header('Location: register.php');
+    exit;
 }
 
 $nome = trim($_POST['nomeUsuario'] ?? '');
 $email = trim($_POST['email'] ?? '');
 $senha = $_POST['senha'] ?? '';
 $conf  = $_POST['confirmar_senha'] ?? '';
-
+// operador aritmético
 if ($senha !== $conf) {
     echo "<script>alert('As senhas não coincidem.'); history.back();</script>";
     exit;
@@ -19,19 +20,44 @@ if (!preg_match('/^[A-Za-z0-9]{8,}$/', $senha)) {
     exit;
 }
 
-try {
-    // checa se já existe e-mail
+    
     $chk = $conn->prepare("SELECT 1 FROM usuario WHERE email = :email LIMIT 1");
     $chk->execute(['email' => $email]);
     if ($chk->fetchColumn()) {
-        echo "<script>alert('E-mail já cadastrado.'); history.back();</script>";
-        exit;
+        $error = 'email_duplicado';
+        break; 
     }
 
-    $hash = password_hash($senha, PASSWORD_DEFAULT);
-    $ins = $conn->prepare("INSERT INTO usuario (nomeUsuario, email, senha) VALUES (:n, :e, :s)");
-    $ins->execute(['n' => $nome, 'e' => $email, 's' => $hash]);
-    echo "<script>alert('Cadastro realizado! Faça login.'); window.location='login.php';</script>";
-} catch (PDOException $e) {
-    echo "Erro no cadastro: " . $e->getMessage();
+    
+    $valid = true;
+
+} while (!$valid);  // O loop vai repetir até que todas as condições sejam atendidas
+$msgconcat = "Olá" . $nome . ", seu cadastro foi realizado com sucesso!";
+echo $msgconcat;
+
+switch ($error) {
+    case 'senha_incorreta':
+        echo "<script>alert('As senhas não coincidem.'); history.back();</script>";
+        break;
+    case 'senha_invalida':
+        echo "<script>alert('Senha inválida. Use ao menos 8 caracteres, apenas letras e números.'); history.back();</script>";
+        break;
+    case 'email_duplicado':
+        echo "<script>alert('E-mail já cadastrado.'); history.back();</script>";
+        break;
+    default:
+        
+        try {
+            
+            $hash = password_hash($senha, PASSWORD_DEFAULT);
+
+            // Insere o novo usuário no banco de dados
+            $ins = $conn->prepare("INSERT INTO usuario (nomeUsuario, email, senha) VALUES (:n, :e, :s)");
+            $ins->execute(['n' => $nome, 'e' => $email, 's' => $hash]);
+
+            echo "<script>alert('Cadastro realizado! Faça login.'); window.location='login.php';</script>";
+        } catch (PDOException $e) {
+            echo "Erro no cadastro: " . $e->getMessage();
+        }
+        break;
 }
